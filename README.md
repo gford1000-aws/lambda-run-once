@@ -2,11 +2,11 @@
 
 Currently AWS CloudWatch (July 2017) does not provide a ScheduledRule for one-time issuing of an Event to trigger a Lambda invocation.
 
-This Cloudformation script provides such a mechanism, using a normal ScheduledRule that triggers the target Lambda indirectly, by having the target invoked asynchronously by another Lambda that is triggered from the ScheduledEvent.  
+This Cloudformation script provides such a mechanism, using a normal ScheduledRule that triggers the target Lambda indirectly.  The target Lambda is invoked asynchronously by another Lambda function that is triggered by the ScheduledRule.  The triggered Lambda function then disbles the ScheduledRule so that it is never triggered again.
 
-To achieve this, the Lamdba function that is triggered by the ScheduledRule must have the permissions to both invoke the target Lambda function and to disable the ScheduledRule (to prevent another event being issued).  The script creates an IAM role for the triggered Lambda function with these priviledges only.
+To achieve this, the triggered Lamdba function must have the permissions to both invoke the target Lambda function and to disable the ScheduledRule.  The script creates an IAM role for the triggered Lambda function with these priviledges only.
 
-The target Lambda can be configured independently - since it is run from an event send by AWS Lambda.  This means that the target Lambda can run within a private VPC (i.e. no access to the internet) if this is required.
+The target Lambda can be configured completely independently - since it is run from an event send by AWS Lambda.  For example, this means that the target Lambda can run within a private VPC (i.e. no access to the internet) if this is required.
 
 The script creates the following:
 
